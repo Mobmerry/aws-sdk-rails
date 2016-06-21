@@ -32,9 +32,12 @@ module Aws
           send_opts[:destinations] = message.destinations
         end
 
+        if message.respond_to?(:sender)
+          send_opts[:source] = message.sender
+        end
+
         send_opts[:source_arn] = @source_arn if @source_arn.present?
         @client.send_raw_email(send_opts)
-
       end
 
       # ActionMailer expects this method to be present and to return a hash.
