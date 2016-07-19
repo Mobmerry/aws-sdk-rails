@@ -22,7 +22,7 @@ module Aws
 		            ::Rails.application.secrets[:s3]['aws_secret_access_key'])
 
         @client = SES::Client.new(credentials: aws_credentials,
-				  region: ::Rails.application.secrets[:ses]['region']
+				  region: ::Rails.application.secrets[:ses]['region'])
       end
 
       # Rails expects this method to exist, and to handle a Mail::Message object
