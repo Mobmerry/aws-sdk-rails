@@ -17,8 +17,12 @@ module Aws
       # @param [Hash] options Passes along initialization options to
       #   [Aws::SES::Client.new](http://docs.aws.amazon.com/sdkforruby/api/Aws/SES/Client.html#initialize-instance_method).
       def initialize(options = {})
-        @source_arn = options.delete(:source_arn)
-        @client     = SES::Client.new(options)
+        aws_credentials = Aws::Credentials.new(
+	                    ::Rails.application.secrets[:s3]['aws_access_key_id'],
+		            ::Rails.application.secrets[:s3]['aws_secret_access_key'])
+
+        @client = SES::Client.new(credentials: aws_credentials,
+				  region: ::Rails.application.secrets[:ses]['region']
       end
 
       # Rails expects this method to exist, and to handle a Mail::Message object
@@ -36,7 +40,7 @@ module Aws
           send_opts[:source] = message.sender
         end
 
-        send_opts[:source_arn] = @source_arn if @source_arn.present?
+        send_opts[:source_arn] = ::Rails.application.secrets[:ses][:source_arn]
         @client.send_raw_email(send_opts)
       end
 
