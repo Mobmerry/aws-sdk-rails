@@ -40,7 +40,7 @@ module Aws
           send_opts[:source] = message.sender
         end
 
-        send_opts[:source_arn] = ::Rails.application.secrets[:ses][:source_arn]
+        send_opts[:source_arn] = ::Rails.application.secrets[:ses]['source_arn']
         @client.send_raw_email(send_opts)
       end
 
